@@ -12,7 +12,9 @@ Run the program of pipeline
 As mentioned above, there are three step for the pipeline. Therefore, we provided program for each step: (1) Cutoff, (2) GCN, and (3) TO-GCN. You can directly run the program by downloading the corresponding binary codes for different system platforms, Linux, MacOS, or Windows. You can also download the C++ source code (.cpp) and compile to executable one by yourself. For compiling source codes by yourself, you can use the following commands:
 
 g++ Cutoff.cpp -o Cutoff
+
 g++ GCN.cpp -o GCN
+
 g++ TO-GCN.cpp -o TO-GCN
 
 (1) Determining the cutoff values
