@@ -2,7 +2,6 @@
 #include <string.h>
 #include <math.h>
 #include <stdlib.h>
-#include <time.h> 
 
 int num_of_genes;
 int num_of_TFs;
@@ -28,12 +27,12 @@ Time_Course *TF_exp_table;
 
 void Read_Time_Course_Data_TFs (char *input) {
 	FILE *fptr = fopen(input, "r");
+    
 	char GID[20];
 	double LDE[num_of_point_LD];
 	double TDE[num_of_point_TD];
 
 	num_of_TFs = 0;
-	//while(fscanf(fptr,"%s", &GID) != EOF) {
     while(fscanf(fptr,"%s", GID) != EOF) {
 		for(int i=0; i<num_of_point_LD; i++) {
 			fscanf(fptr,"\t%lf", &LDE[i]);
@@ -69,7 +68,6 @@ void Read_Time_Course_Data_TFs (char *input) {
     
 
 	int index = 0;
-	//while(fscanf(fptr,"%s", &GID) != EOF) {
     while(fscanf(fptr,"%s", GID) != EOF) {
 		strcpy(TF_exp_table[index].gene_ID, GID);
 		for(int i=0; i<num_of_point_LD; i++) {
@@ -88,12 +86,12 @@ void Read_Time_Course_Data_TFs (char *input) {
 
 void Read_Time_Course_Data_genes (char *input) {
 	FILE *fptr = fopen(input, "r");
+
 	char GID[20];
 	double LDE[num_of_point_LD];
 	double TDE[num_of_point_TD];
 	
 	num_of_genes = 0;
-	//while(fscanf(fptr,"%s", &GID) != EOF) {
 	while(fscanf(fptr,"%s", GID) != EOF) {
 		for(int i=0; i<num_of_point_LD; i++) {
 			fscanf(fptr,"\t%lf", &LDE[i]);
@@ -127,7 +125,6 @@ void Read_Time_Course_Data_genes (char *input) {
     }	
 
 	int index = 0;
-	//while(fscanf(fptr,"%s", &GID) != EOF) {
 	while(fscanf(fptr,"%s", GID) != EOF) {    
 		strcpy(gene_exp_table[index].gene_ID, GID);
 		for(int i=0; i<num_of_point_LD; i++) {
@@ -217,7 +214,6 @@ void node_pair_generator_LD_or_TD() {
             if(strcmp(TF_exp_table[i].gene_ID, gene_exp_table[j].gene_ID) != 0) {
                 R_LD = r_calculator(i,j,0);
                 R_TD = r_calculator(i,j,1);
-                //fprintf(fout9,"%f\t%f\n",R_LD, R_TD);
                 histogram_calculation(R_LD,0);
                 histogram_calculation(R_TD,1);
             }
@@ -273,13 +269,6 @@ void function_one () {
     }
     
     fout1 = fopen("PCC_histogram.tsv","w");
-    
-    /*
-    fprintf(fout1, "BIN\t# in LD\t# in TD\tPDF in LD\tPDF in TD\tCDF_asc in LD\tCDF_asc in TD\n");
-    for(int i=0; i<=200; i++) {
-        fprintf(fout1, "%lf\t%lld\t%lld\t%lf\t%lf\t%lf\t%lf\n", bin[i], histogram_LD[i], histogram_TD[i], PDF_LD[i], PDF_TD[i], CDF_asc_LD[i], CDF_asc_TD[i]);
-    }
-    */
 
     fprintf(fout1, "BIN\t# in LD\t# in TD\tPDF in LD\tPDF in TD\tCDF_asc in LD\tCDF_asc in TD\tCDF_desc in LD\tCDF_desc in TD\n");
     for(int i=0; i<=200; i++) {
@@ -359,20 +348,31 @@ int main(int argc, char* argv[]) {
         strcpy(input_file2, argv[4]);
         strcpy(input_file_TF, argv[3]);
         strcpy(input_file_gene, argv[4]);
-        
-        Read_Time_Course_Data_TFs(input_file1);
-        Read_Time_Course_Data_genes(input_file2);
 
+        FILE *fptr1 = fopen(input_file1, "r");
+        FILE *fptr2 = fopen(input_file2, "r");
+        
+        if(fptr1 == NULL || fptr2 == NULL) {
+        
+            printf("\nCan't find the input file. Please check the inupt file again!\n\n");
+        
+        } else {
+        
+            fclose (fptr1);
+            fclose (fptr2);
+            
+            Read_Time_Course_Data_TFs(input_file1);
+            Read_Time_Course_Data_genes(input_file2);
 
-        printf("No. of TFs: %d\n", num_of_TFs);
-        printf("No. of Genes: %d\n", num_of_genes);
-        printf("No. of samples under Cond. 1: %d\n", num_of_point_LD);
-        printf("No. of samples under Cond. 2: %d\n\n", num_of_point_TD);
+            printf("No. of TFs: %d\n", num_of_TFs);
+            printf("No. of Genes: %d\n", num_of_genes);
+            printf("No. of samples under Cond. 1: %d\n", num_of_point_LD);
+            printf("No. of samples under Cond. 2: %d\n\n", num_of_point_TD);
         
-        printf("Waiting for histogram generation and cutoff values calculation......\n\n");
-        node_pair_generator_LD_or_TD();
-        function_one();
-        
+            printf("Waiting for histogram generation and cutoff values calculation......\n\n");
+            node_pair_generator_LD_or_TD();
+            function_one();
+        }
     }
     
     return 0;	

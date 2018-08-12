@@ -2,7 +2,6 @@
 #include <string.h>
 #include <math.h>
 #include <stdlib.h>
-#include <time.h> 
 
 int num_of_genes;
 int num_of_TFs;
@@ -34,13 +33,11 @@ int num_of_neg_edge = 0;
 
 float pos_cutoff_LD;
 float pos_cutoff_TD;
-//float neg_cutoff_LD;
-//float neg_cutoff_TD;
+
 float pos_no_cutoff = 0.5;
 float neg_no_cutoff = -0.5;
 
-char seed_TF_ID[20];
-//char seed_TF_ID[20] = "Zm00001d041056"; //ARF2 for LD+TD+ and LD+TD0
+char seed_TF_ID[20];  //seed_TF_ID for testing: "Zm00001d041056"; //ARF2 for LD+TD+ and LD+TD0
 
 int done = 0;
 
@@ -51,7 +48,6 @@ void Read_Time_Course_Data_TFs (char *input) {
 	double TDE[num_of_point_TD];
 
 	num_of_TFs = 0;
-	//while(fscanf(fptr,"%s", &GID) != EOF) {
     while(fscanf(fptr,"%s", GID) != EOF) {
 		for(int i=0; i<num_of_point_LD; i++) {
 			fscanf(fptr,"\t%lf", &LDE[i]);
@@ -87,7 +83,6 @@ void Read_Time_Course_Data_TFs (char *input) {
     
 
 	int index = 0;
-	//while(fscanf(fptr,"%s", &GID) != EOF) {
     while(fscanf(fptr,"%s", GID) != EOF) {
 		strcpy(TF_exp_table[index].gene_ID, GID);
 		for(int i=0; i<num_of_point_LD; i++) {
@@ -111,7 +106,6 @@ void Read_Time_Course_Data_genes (char *input) {
 	double TDE[num_of_point_TD];
 	
 	num_of_genes = 0;
-	//while(fscanf(fptr,"%s", &GID) != EOF) {
     while(fscanf(fptr,"%s", GID) != EOF) {
 		for(int i=0; i<num_of_point_LD; i++) {
 			fscanf(fptr,"\t%lf", &LDE[i]);
@@ -145,7 +139,6 @@ void Read_Time_Course_Data_genes (char *input) {
     }	
 
 	int index = 0;
-	//while(fscanf(fptr,"%s", &GID) != EOF) {
     while(fscanf(fptr,"%s", GID) != EOF) {
 		strcpy(gene_exp_table[index].gene_ID, GID);
 		for(int i=0; i<num_of_point_LD; i++) {
@@ -338,21 +331,28 @@ void set_neighbor_pos(char *check_ID, int L) {
 void level_assignment() {
     
     int level = 0;
+    int seed_found_in_GCN = 0;
     
     //initialization of seed TF
     for (int i=0; i<num_of_TFs; i++) {
         if(strcmp(seed_TF_ID, TF_exp_table[i].gene_ID) == 0) {
             TF_exp_table[i].level = level;
             set_neighbor_pos(seed_TF_ID, level+1);
+            seed_found_in_GCN = 1;
         }
     }
     
-    while (done == 0) {
-        level++;
-        done = 1;
-        for (int i=0; i<num_of_TFs; i++) {
-            if(TF_exp_table[i].level == level) {
-                set_neighbor_pos(TF_exp_table[i].gene_ID, level+1);
+    if (seed_found_in_GCN == 0) {
+        printf("\nCan't find seed ID in the GCN. Please check the see ID again!\n\n");
+    } else {
+    
+        while (done == 0) {
+            level++;
+            done = 1;
+            for (int i=0; i<num_of_TFs; i++) {
+                if(TF_exp_table[i].level == level) {
+                    set_neighbor_pos(TF_exp_table[i].gene_ID, level+1);
+                }
             }
         }
     }
@@ -394,27 +394,38 @@ int main(int argc, char* argv[]) {
         
         pos_cutoff_LD = atof(argv[5]);
         pos_cutoff_TD = atof(argv[6]);
-        //neg_cutoff_LD = atof(argv[7]);
-        //neg_cutoff_TD = atof(argv[8]);
         
         strcpy(seed_TF_ID, argv[7]);
         coex_type = atoi(argv[8]);
-        
-        Read_Time_Course_Data_TFs(input_file1);
-        Read_Time_Course_Data_genes(input_file2);
 
-        printf("NO. of TFs: %d\n", num_of_TFs);
-        printf("NO. of Genes: %d\n", num_of_genes);
-        printf("No. of samples under Cond. 1: %d\n", num_of_point_LD);
-        printf("No. of samples under Cond. 2: %d\n", num_of_point_TD);
-        printf("Cutoffs for (Pos_C1, Pos_C2): (%1.2lf, %1.2lf)\n\n", pos_cutoff_LD, pos_cutoff_TD);
-        printf("Assigning levels for TFs in GCN by Breadth-First-Search (BFS) method......\n");
+        FILE *fptr1 = fopen(input_file1, "r");
+        FILE *fptr2 = fopen(input_file2, "r");
         
-        node_pair_generator_LD_or_TD(coex_type); //0: for LD+TD+; 1: for LD+TD0; 2: for LD0TD+
-        level_assignment();
-        function_three();
+        if(fptr1 == NULL || fptr2 == NULL) {
+            
+            printf("\nCan't find the input file. Please check the inupt file again!\n\n");
+            
+        } else {
+            
+            fclose (fptr1);
+            fclose (fptr2);
         
-        printf("Done!\n");
+            Read_Time_Course_Data_TFs(input_file1);
+            Read_Time_Course_Data_genes(input_file2);
+
+            printf("NO. of TFs: %d\n", num_of_TFs);
+            printf("NO. of Genes: %d\n", num_of_genes);
+            printf("No. of samples under Cond. 1: %d\n", num_of_point_LD);
+            printf("No. of samples under Cond. 2: %d\n", num_of_point_TD);
+            printf("Cutoffs for (Pos_C1, Pos_C2): (%1.2lf, %1.2lf)\n\n", pos_cutoff_LD, pos_cutoff_TD);
+            printf("Assigning levels for TFs in GCN by Breadth-First-Search (BFS) method......\n");
+        
+            node_pair_generator_LD_or_TD(coex_type); //0: for LD+TD+; 1: for LD+TD0; 2: for LD0TD+
+            level_assignment();
+            function_three();
+        
+            printf("Done!\n");
+        }
     }
     
     return 0;	

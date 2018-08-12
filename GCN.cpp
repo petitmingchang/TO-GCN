@@ -2,7 +2,6 @@
 #include <string.h>
 #include <math.h>
 #include <stdlib.h>
-#include <time.h> 
 
 int num_of_genes;
 int num_of_TFs;
@@ -34,7 +33,6 @@ void Read_Time_Course_Data_TFs (char *input) {
 	double TDE[num_of_point_TD];
 
 	num_of_TFs = 0;
-	//while(fscanf(fptr,"%s", &GID) != EOF) {
     while(fscanf(fptr,"%s", GID) != EOF) {
 		for(int i=0; i<num_of_point_LD; i++) {
 			fscanf(fptr,"\t%lf", &LDE[i]);
@@ -70,7 +68,6 @@ void Read_Time_Course_Data_TFs (char *input) {
     
 
 	int index = 0;
-	//while(fscanf(fptr,"%s", &GID) != EOF) {
     while(fscanf(fptr,"%s", GID) != EOF) {
 		strcpy(TF_exp_table[index].gene_ID, GID);
 		for(int i=0; i<num_of_point_LD; i++) {
@@ -94,7 +91,6 @@ void Read_Time_Course_Data_genes (char *input) {
 	double TDE[num_of_point_TD];
 	
 	num_of_genes = 0;
-	//while(fscanf(fptr,"%s", &GID) != EOF) {
     while(fscanf(fptr,"%s", GID) != EOF) {
 		for(int i=0; i<num_of_point_LD; i++) {
 			fscanf(fptr,"\t%lf", &LDE[i]);
@@ -128,7 +124,6 @@ void Read_Time_Course_Data_genes (char *input) {
     }	
 
 	int index = 0;
-	//while(fscanf(fptr,"%s", &GID) != EOF) {
     while(fscanf(fptr,"%s", GID) != EOF) {
 		strcpy(gene_exp_table[index].gene_ID, GID);
 		for(int i=0; i<num_of_point_LD; i++) {
@@ -323,22 +318,31 @@ int main(int argc, char* argv[]) {
         pos_cutoff_TD = atof(argv[6]);
         neg_cutoff_LD = atof(argv[7]);
         neg_cutoff_TD = atof(argv[8]);
-        
-        Read_Time_Course_Data_TFs(input_file1);
-        Read_Time_Course_Data_genes(input_file2);
 
-        printf("NO. of TFs: %d\n", num_of_TFs);
-        printf("NO. of Genes: %d\n", num_of_genes);
-        printf("No. of samples under Cond. 1: %d\n", num_of_point_LD);
-        printf("No. of samples under Cond. 2: %d\n", num_of_point_TD);
-        printf("Cutoff values for (Pos_C1, Pos_C2, Neg_C1, Neg_C2): (%1.2lf, %1.2lf, %1.2lf, %1.2lf)\n\n", pos_cutoff_LD, pos_cutoff_TD, neg_cutoff_LD, neg_cutoff_TD);
-        printf("Generating tables of eight types of coexpression......\n");
+        FILE *fptr1 = fopen(input_file1, "r");
+        FILE *fptr2 = fopen(input_file2, "r");
         
-        node_pair_generator_LD_or_TD();
-        //function_two();
+        if(fptr1 == NULL || fptr2 == NULL) {
+            
+            printf("\nCan't find the input file. Please check the inupt file again!\n\n");
+            
+        } else {
+        
+            Read_Time_Course_Data_TFs(input_file1);
+            Read_Time_Course_Data_genes(input_file2);
 
-        printf("Done!\n");
+            printf("NO. of TFs: %d\n", num_of_TFs);
+            printf("NO. of Genes: %d\n", num_of_genes);
+            printf("No. of samples under Cond. 1: %d\n", num_of_point_LD);
+            printf("No. of samples under Cond. 2: %d\n", num_of_point_TD);
+            printf("Cutoff values for (Pos_C1, Pos_C2, Neg_C1, Neg_C2): (%1.2lf, %1.2lf, %1.2lf, %1.2lf)\n\n", pos_cutoff_LD, pos_cutoff_TD, neg_cutoff_LD, neg_cutoff_TD);
+            printf("Generating tables of eight types of coexpression......\n");
+        
+            node_pair_generator_LD_or_TD();
+        
+            printf("Done!\n");
+        }
     }
     
-    return 0;	
+    return 0;
 }
