@@ -19,7 +19,7 @@ g++ TO-GCN.cpp -o TO-GCN
 ```
 ### (1) Determining the cutoff values
 
-We need cutoff values of Pearson’s Correlation Coefficient (PCC) under two conditions for constructing the GCN. Our method is to calculate all the PCC values for each TF-gene pair for each condition. With these PCC values, we generate the distribution of probability density function (PDF) and cumulative density function (CDF). According to the CDF, we can give you a suggested cutoff value whose p < 0.05 for each condition. To run the Cutoff program, you have to give 4 parameters: number of samples under condition 1, number of samples under condition 2, data file of TF genes, and data file of all genes. Here is the example of our study:
+We need cutoff values of Pearson’s Correlation Coefficient (PCC) under two conditions for constructing the GCN. Our method is to calculate all the PCC values for each TF-gene pair for each condition. With these PCC values, we generate the distribution of probability density function (PDF) and cumulative density function (CDF). According to the CDF, we can suggest you positive and negative cutoff values with p < 0.05 for each condition. To run the Cutoff program, you have to give 4 parameters: number of samples under condition 1, number of samples under condition 2, data file of TF genes, and data file of all genes. Here is the example of our study:
 ```sh
 Cutoff 13 13 example_data/TFs_1718.tsv example_data/All_genes_25489.tsv
 ```
