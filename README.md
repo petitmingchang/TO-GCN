@@ -9,7 +9,7 @@ Before going to the pipeline, we need to prepare two lists (TF genes and all gen
 
 In the example folder, there are two data files from the study of "A Comparative Transcriptomics Method to Infer Time-ordered Gene Coexpression Networks and applications". The data should be a Tab-separated values (.tsv) format that contains m rows and n columns, where m is the number of genes (TF genes or all genes) and n represents the summation (n1 + n2) of sample number under condition 1 (n1) and condition 2 (n2).The gene ID is listed in the first column. For each gene, the RPKM values of each sample point under condition 1 and condition 2 are listed from the second to (n1+1)-th columns and from (n1+2)-th to (n1+n2+1)-th columns, respectively. In the example data of TFs_1718.tsv, there are 1718 rows for 1718 TF genes and 27 columns for one gene ID, 13 samples of condition 1, and 13 samples of condition 2.
 
-## Run the program of pipeline
+## Run the programs of pipeline
 
 As mentioned above, there are three step for the pipeline. Therefore, we provided program for each step: (1) Cutoff, (2) GCN, and (3) TO-GCN. You can directly run the program by downloading the corresponding binary codes for different system platforms, Linux, MacOS, or Windows. You can also download the C++ source code (.cpp) and compile to executable one by yourself. For compiling source codes by yourself, you can use the following commands:
 
