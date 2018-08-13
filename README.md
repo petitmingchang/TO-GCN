@@ -7,7 +7,7 @@ The pipeline of constructing a time-ordered gene coexpression network (TO-GCN) c
 
 Before going to the pipeline, we need to prepare two lists (TF genes and all genes) with RPKM values at different sample points under two conditions, the three-dimensional data. In addition to the data files, we also prepare some information of data like the number of sample under condition 1 (n1) and condition (n2).
 
-In the example folder, there are two data files from the study of "A Comparative Transcriptomics Method to Infer Time-ordered Gene Coexpression Networks and applications". The data should be a Tab-separated values (.tsv) format that contains m rows and n columns, where m is the number of genes (TF genes or all genes) and n represents the summation (n1 + n2) of sample number under condition 1 (n1) and condition 2 (n2).The gene ID is listed in the first column. For each gene, the RPKM values of each sample point under condition 1 and condition 2 are listed from the second to (n1+1)-th columns and from (n1+2)-th to (n1+n2+1)-th columns, respectively. In the example data of TFs_1718.tsv, there are 1718 rows for 1718 TF genes and 27 columns for one gene ID, 13 samples of condition 1, and 13 samples of condition 2.
+In the example folder, there are two data files from the study of "A Comparative Transcriptomics Method to Infer Time-ordered Gene Coexpression Networks and its Applications". The data should be a Tab-separated values (.tsv) format that contains m rows and n columns, where m is the number of genes (TF genes or all genes) and n represents the summation (n1 + n2) of sample number under condition 1 (n1) and condition 2 (n2).The gene ID is listed in the first column. For each gene, the RPKM values of each sample point under condition 1 and condition 2 are listed from the second to (n1+1)-th columns and from (n1+2)-th to (n1+n2+1)-th columns, respectively. In the example data of TFs_1718.tsv, there are 1718 rows for 1718 TF genes and 27 columns for one gene ID, 13 samples of condition 1, and 13 samples of condition 2.
 
 ## Run the programs of pipeline
 
@@ -23,7 +23,7 @@ We need cutoff values of Pearson’s Correlation Coefficient (PCC) under two con
 ```sh
 Cutoff 13 13 example_data/TFs_1718.tsv example_data/All_genes_25489.tsv
 ```
-In addition to the suggested cutoff values, the program will also generate a file of PCC value distribution in csv format. You can use the file to generate a histogram bar chart by Microsoft Excel or R program. 
+In addition to the suggested cutoff values, the program will also generate a file of PCC value distribution in tsv format. You can use the file to generate a histogram bar chart by Microsoft Excel or R program. 
 
 ### (2) Constructing eight GCNs for different types
 
