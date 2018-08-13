@@ -1,4 +1,4 @@
-# TO-GCN
+# Time-ordered Gene Coexpression Network (TO-GCN)
 Pipeline of time-ordered gene coexpression network (TO-GCN) construction from three-dimensional (gene expression, condition, and time) data
 
 The pipeline of constructing a time-ordered gene coexpression network (TO-GCN) contains three steps: (1) Determining the cutoff values, (2) constructing eight GCNs for different types, and (3) determining time-ordered level for nodes in interesting GCN.
