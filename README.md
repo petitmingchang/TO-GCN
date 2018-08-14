@@ -27,7 +27,7 @@ In addition to the suggested cutoff values, the program will also generate a fil
 
 ### (2) GCN: Constructing eight GCNs for different types
 
-In this step, we want to construct eight coexpression types of GCN under two conditions (C1 and C2): C1+C2+, C1+C20, C1+C2–, C10C2+ C1–C2+, C1–C2–, C1–C20, and C10C2–. The output file of each GCN is listed in comma-separated value (.csv) format. The five columns represent the TF gene ID, coexpression type, gene ID, PCC under condition 1, PCC under condition 2. You can import these gene pair into the network generation tool, like [Cytoscape](http://www.cytoscape.org), to get the visualization of the GCN. To run the GCN program, you have to give 4 more parameters (total 8 parameters) that indicate the positive cutoff values for conditions 1 and 2 and the negative cutoff values for condtions 1 and 2. Here is the example:
+In this step, we want to construct eight coexpression types of GCN under two conditions (C1 and C2): C1+C2+, C1+C20, C1+C2–, C10C2+ C1–C2+, C1–C2–, C1–C20, and C10C2–, where +, -, 0 represents the postive, negative, and no coexpression, respectively. The output file of each GCN is listed in comma-separated value (.csv) format. The five columns represent the TF gene ID, coexpression type, gene ID, PCC under condition 1, PCC under condition 2. You can import these gene pair into the network generation tool, like [Cytoscape](http://www.cytoscape.org), to get the visualization of the GCN. To run the GCN program, you have to give 4 more parameters (total 8 parameters) that indicate the positive cutoff values for conditions 1 and 2 and the negative cutoff values for condtions 1 and 2. Here is the example:
 ```sh
 GCN 13 13 example_data/TFs_1718.tsv example_data/TFs_1718.tsv 0.84 0.84 -0.75 -0.75
 ```
