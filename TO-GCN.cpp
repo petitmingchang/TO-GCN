@@ -37,7 +37,7 @@ float pos_cutoff_TD;
 float pos_no_cutoff = 0.5;
 float neg_no_cutoff = -0.5;
 
-char seed_TF_ID[20];  //seed_TF_ID for testing: "Zm00001d041056"; //ARF2 for LD+TD+ and LD+TD0
+char seed_TF_ID[20];  //seed_TF_ID for testing: "Zm00001d041056" (ZmARF2) for C1_+C2+
 
 int done = 0;
 
@@ -268,20 +268,20 @@ void node_pair_generator_LD_or_TD(int opt) {
                 R_LD = r_calculator(i,j,0);
                 R_TD = r_calculator(i,j,1);
 
-                if(opt == 0) { //LD+TD+
+                if(opt == 0) { //C1+C2+
                     if(R_LD >= pos_cutoff_LD && R_TD >= pos_cutoff_TD) {
                         strcpy(Pos_Coexp[index_pos].query_gene_ID, TF_exp_table[i].gene_ID);
                         strcpy(Pos_Coexp[index_pos].target_gene_ID, gene_exp_table[j].gene_ID);
                         index_pos++;
                     }
-                } else if(opt == 1) { //LD+TD0
-                    if(R_LD >= pos_cutoff_LD && R_TD < pos_no_cutoff && R_TD >= neg_no_cutoff) { // (1)LD+TD0
+                } else if(opt == 1) { //C1+C20
+                    if(R_LD >= pos_cutoff_LD && R_TD < pos_no_cutoff && R_TD >= neg_no_cutoff) {
                         strcpy(Pos_Coexp[index_pos].query_gene_ID, TF_exp_table[i].gene_ID);
                         strcpy(Pos_Coexp[index_pos].target_gene_ID, gene_exp_table[j].gene_ID);
                         index_pos++;
                     }
-                } else if(opt == 2) { //LD0TD+
-                    if(R_TD >= pos_cutoff_TD && R_LD < pos_no_cutoff && R_LD >= neg_no_cutoff) { // (5)LD0TD+
+                } else if(opt == 2) { //C10C2+
+                    if(R_TD >= pos_cutoff_TD && R_LD < pos_no_cutoff && R_LD >= neg_no_cutoff) {
                         strcpy(Pos_Coexp[index_pos].query_gene_ID, TF_exp_table[i].gene_ID);
                         strcpy(Pos_Coexp[index_pos].target_gene_ID, gene_exp_table[j].gene_ID);
                         index_pos++;
@@ -415,12 +415,12 @@ int main(int argc, char* argv[]) {
 
             printf("NO. of TFs: %d\n", num_of_TFs);
             printf("NO. of Genes: %d\n", num_of_genes);
-            printf("No. of samples under Cond. 1: %d\n", num_of_point_LD);
-            printf("No. of samples under Cond. 2: %d\n", num_of_point_TD);
+            printf("No. of samples under Cond.1: %d\n", num_of_point_LD);
+            printf("No. of samples under Cond.2: %d\n", num_of_point_TD);
             printf("Cutoffs for (Pos_C1, Pos_C2): (%1.2lf, %1.2lf)\n\n", pos_cutoff_LD, pos_cutoff_TD);
             printf("Assigning levels for TFs in GCN by Breadth-First-Search (BFS) method......\n");
         
-            node_pair_generator_LD_or_TD(coex_type); //0: for LD+TD+; 1: for LD+TD0; 2: for LD0TD+
+            node_pair_generator_LD_or_TD(coex_type); //0: for C1+C2+; 1: for C1+C20; 2: for C10C2+
             level_assignment();
             function_three();
         

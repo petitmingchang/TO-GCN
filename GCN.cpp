@@ -222,35 +222,35 @@ void node_pair_generator_LD_or_TD() {
                     R_LD = r_calculator(i,j,0);
                     R_TD = r_calculator(i,j,1);
                     
-                    if(R_LD >= pos_cutoff_LD && R_TD >= pos_cutoff_TD) { // (3) LD+TD+
+                    if(R_LD >= pos_cutoff_LD && R_TD >= pos_cutoff_TD) { // (3) C1+C2+
                         fprintf(fout1, "%s,C1+C2+,%s,%lf,%lf\n", TF_exp_table[i].gene_ID, gene_exp_table[j].gene_ID, R_LD, R_TD);
                         TF_exp_table[i].network[3]++;
                         gene_exp_table[j].network[3]++;
-                    } else if(R_LD >= pos_cutoff_LD && R_TD < pos_no_cutoff && R_TD >= neg_no_cutoff) { // (1)LD+TD0
+                    } else if(R_LD >= pos_cutoff_LD && R_TD < pos_no_cutoff && R_TD >= neg_no_cutoff) { // (1)C1+C20
                         fprintf(fout2, "%s,C1+C20,%s,%lf,%lf\n", TF_exp_table[i].gene_ID, gene_exp_table[j].gene_ID, R_LD, R_TD);
                         TF_exp_table[i].network[1]++;
                         gene_exp_table[j].network[1]++;
-                    } else if(R_TD >= pos_cutoff_TD && R_LD < pos_no_cutoff && R_LD >= neg_no_cutoff) { // (5)LD0TD+
+                    } else if(R_TD >= pos_cutoff_TD && R_LD < pos_no_cutoff && R_LD >= neg_no_cutoff) { // (5)C10C2+
                         fprintf(fout3, "%s,C10C2+,%s,%lf,%lf\n", TF_exp_table[i].gene_ID, gene_exp_table[j].gene_ID, R_LD, R_TD);
                         TF_exp_table[i].network[5]++;
                         gene_exp_table[j].network[5]++;
-                    } else if(R_LD < neg_cutoff_LD && R_TD < neg_cutoff_TD) { // (4)LD-TD-
+                    } else if(R_LD < neg_cutoff_LD && R_TD < neg_cutoff_TD) { // (4)C1-C2-
                         fprintf(fout4, "%s,C1-C2-,%s,%lf,%lf\n", TF_exp_table[i].gene_ID, gene_exp_table[j].gene_ID, R_LD, R_TD);
                         TF_exp_table[i].network[4]++;
                         gene_exp_table[j].network[4]++;
-                    } else if(R_LD < neg_cutoff_LD && R_TD < pos_no_cutoff && R_TD >= neg_no_cutoff) { // (2)LD-TD0
+                    } else if(R_LD < neg_cutoff_LD && R_TD < pos_no_cutoff && R_TD >= neg_no_cutoff) { // (2)C1-C20
                         fprintf(fout5, "%s,C1-C20,%s,%lf,%lf\n", TF_exp_table[i].gene_ID, gene_exp_table[j].gene_ID, R_LD, R_TD);
                         TF_exp_table[i].network[2]++;
                         gene_exp_table[j].network[2]++;
-                    } else if(R_TD < neg_cutoff_TD && R_LD < pos_no_cutoff && R_LD >= neg_no_cutoff) { // (6)LD0TD-
+                    } else if(R_TD < neg_cutoff_TD && R_LD < pos_no_cutoff && R_LD >= neg_no_cutoff) { // (6)C10C2-
                         fprintf(fout6, "%s,C10C2-,%s,%lf,%lf\n", TF_exp_table[i].gene_ID, gene_exp_table[j].gene_ID, R_LD, R_TD);
                         TF_exp_table[i].network[6]++;
                         gene_exp_table[j].network[6]++;
-                    } else if(R_LD >= pos_cutoff_LD && R_TD < neg_cutoff_TD) { // (7)LD+TD-
+                    } else if(R_LD >= pos_cutoff_LD && R_TD < neg_cutoff_TD) { // (7)C1+C2-
                         fprintf(fout7, "%s,C1+C2-,%s,%lf,%lf\n", TF_exp_table[i].gene_ID, gene_exp_table[j].gene_ID, R_LD, R_TD);
                         TF_exp_table[i].network[7]++;
                         gene_exp_table[j].network[7]++;
-                    } else if(R_TD >= pos_cutoff_TD && R_LD < neg_cutoff_LD) { // (8)LD-TD+
+                    } else if(R_TD >= pos_cutoff_TD && R_LD < neg_cutoff_LD) { // (8)C1-C2+
                         fprintf(fout8, "%s,C1-C2+,%s,%lf,%lf\n", TF_exp_table[i].gene_ID, gene_exp_table[j].gene_ID, R_LD, R_TD);
                         TF_exp_table[i].network[8]++;
                         gene_exp_table[j].network[8]++;
@@ -333,8 +333,8 @@ int main(int argc, char* argv[]) {
 
             printf("NO. of TFs: %d\n", num_of_TFs);
             printf("NO. of Genes: %d\n", num_of_genes);
-            printf("No. of samples under Cond. 1: %d\n", num_of_point_LD);
-            printf("No. of samples under Cond. 2: %d\n", num_of_point_TD);
+            printf("No. of samples under Cond.1: %d\n", num_of_point_LD);
+            printf("No. of samples under Cond.2: %d\n", num_of_point_TD);
             printf("Cutoff values for (Pos_C1, Pos_C2, Neg_C1, Neg_C2): (%1.2lf, %1.2lf, %1.2lf, %1.2lf)\n\n", pos_cutoff_LD, pos_cutoff_TD, neg_cutoff_LD, neg_cutoff_TD);
             printf("Generating tables of eight types of coexpression......\n");
         

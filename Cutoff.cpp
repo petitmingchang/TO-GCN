@@ -319,10 +319,10 @@ void function_one () {
     pos_cutoff_LD = pos_cutoff_LD + 2;
     pos_cutoff_TD = pos_cutoff_TD + 2;
     
-    printf("Cutoff of postive coexpression for Cond. 1 = %1.2lf\n", bin[pos_cutoff_LD]);
-    printf("Cutoff of postive coexpression for Cond. 2 = %1.2lf\n", bin[pos_cutoff_TD]);
-    printf("Cutoff of negative coexpression for Cond. 1 = %1.2lf\n", bin[neg_cutoff_LD]);
-    printf("Cutoff of negative coexpression for Cond. 2 = %1.2lf\n\n", bin[neg_cutoff_TD]);
+    printf("Cutoff of postive coexpression for Cond.1 = %1.2lf\n", bin[pos_cutoff_LD]);
+    printf("Cutoff of postive coexpression for Cond.2 = %1.2lf\n", bin[pos_cutoff_TD]);
+    printf("Cutoff of negative coexpression for Cond.1 = %1.2lf\n", bin[neg_cutoff_LD]);
+    printf("Cutoff of negative coexpression for Cond.2 = %1.2lf\n\n", bin[neg_cutoff_TD]);
     printf("You can just copy and paste the following command to get the GCNs or change parameters by yourself:\n");
     printf("GCN %d %d %s %s %1.2lf %1.2lf %1.2lf %1.2f\n", num_of_point_LD, num_of_point_TD, input_file_TF, input_file_gene, bin[pos_cutoff_LD], bin[pos_cutoff_TD], bin[neg_cutoff_LD], bin[neg_cutoff_TD]);
 }
@@ -333,7 +333,7 @@ int main(int argc, char* argv[]) {
     char input_file2[100];   //All gene list
     
     if (argc != 5) {
-        printf("\nUsage: Cutoff #Cond1_samples #Cond2_samples file_of_TF_genes file_of_all_genes\n\n");
+        printf("\nUsage: Cutoff #Cond.1_samples #Cond.2_samples file_of_TF_genes file_of_all_genes\n\n");
     } else {
         
         for (int i=0; i<=200; i++) {
@@ -366,8 +366,8 @@ int main(int argc, char* argv[]) {
 
             printf("No. of TFs: %d\n", num_of_TFs);
             printf("No. of Genes: %d\n", num_of_genes);
-            printf("No. of samples under Cond. 1: %d\n", num_of_point_LD);
-            printf("No. of samples under Cond. 2: %d\n\n", num_of_point_TD);
+            printf("No. of samples under Cond.1: %d\n", num_of_point_LD);
+            printf("No. of samples under Cond.2: %d\n\n", num_of_point_TD);
         
             printf("Waiting for histogram generation and cutoff values calculation......\n\n");
             node_pair_generator_LD_or_TD();
