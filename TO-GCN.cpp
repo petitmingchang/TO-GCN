@@ -5,6 +5,7 @@
 
 int num_of_genes;
 int num_of_TFs;
+int num_of_seeds;
 
 int num_of_point_LD;
 int num_of_point_TD;
@@ -19,6 +20,7 @@ typedef struct Time_Course{
 
 Time_Course *gene_exp_table;
 Time_Course *TF_exp_table;
+Time_Course *gene_seed_table;
 
 typedef struct Relation_table{
     char query_gene_ID[20];
@@ -152,6 +154,28 @@ void Read_Time_Course_Data_genes (char *input) {
 		index++;
 	}		
 	
+    fclose(fptr);
+}
+
+void Read_seed_genes (char *input) {
+    FILE *fptr = fopen(input, "r");
+    char GID[20];
+    
+    num_of_seeds = 0;
+    while(fscanf(fptr,"%s", GID) != EOF) {
+        num_of_seeds++;
+    }
+
+    rewind(fptr);
+    //table initialization
+    gene_seed_table = new Time_Course[num_of_seeds];
+
+    int index = 0;
+    while(fscanf(fptr,"%s", GID) != EOF) {
+        strcpy(gene_seed_table[index].gene_ID, GID);
+        index++;
+    }
+    
     fclose(fptr);
 }
 
@@ -330,22 +354,35 @@ void set_neighbor_pos(char *check_ID, int L) {
 
 void level_assignment() {
     
-    int level = 0;
+    int level = 1;
+    int num_of_found_seeds = 0;
     int seed_found_in_GCN = 0;
-    
-    //initialization of seed TF
+
     for (int i=0; i<num_of_TFs; i++) {
-        if(strcmp(seed_TF_ID, TF_exp_table[i].gene_ID) == 0) {
-            TF_exp_table[i].level = level;
-            set_neighbor_pos(seed_TF_ID, level+1);
-            seed_found_in_GCN = 1;
+        for (int j=0; j<num_of_seeds; j++) {
+            if(strcmp(gene_seed_table[j].gene_ID, TF_exp_table[i].gene_ID) == 0) {
+                    TF_exp_table[i].level = level;
+                num_of_found_seeds++;
+            }
         }
     }
     
-    if (seed_found_in_GCN == 0) {
-        printf("\nCan't find seed ID in the GCN. Please check the see ID again!\n\n");
-    } else {
+    if(num_of_found_seeds == num_of_seeds) {
+        seed_found_in_GCN = 1;
+    }
     
+    if (seed_found_in_GCN == 0) {
+        printf("\nSome ID cannot be found in the GCN. Please check the see ID list again!\n\n");
+    } else {
+
+        for (int i=0; i<num_of_TFs; i++) {
+            for (int j=0; j<num_of_seeds; j++) {
+                if(strcmp(gene_seed_table[j].gene_ID, TF_exp_table[i].gene_ID) == 0) {
+                    set_neighbor_pos(TF_exp_table[i].gene_ID, level+1);
+                }
+            }
+        }
+        
         while (done == 0) {
             level++;
             done = 1;
@@ -376,10 +413,11 @@ void function_three () {
 int main(int argc, char* argv[]) {
     char input_file1[100];   //TF gene list
     char input_file2[100];   //All gene list
+    char input_file3[100];   //seed gene list
     int coex_type; //coexpression type
     
     if (argc != 9) {
-        printf("\nUsage: TO-GCN #Cond1_samples #Cond2_samples file_of_TF_genes file_of_all_genes Cutoff_pos_C1 Cutoff_pos_C2 Seed_ID coexpression_type\n");
+        printf("\nUsage: TO-GCN #Cond1_samples #Cond2_samples file_of_TF_genes file_of_all_genes Cutoff_pos_C1 Cutoff_pos_C2 Seed_ID_list coexpression_type\n");
         printf("coexpression_type = 0: C1+C2+\n");
         printf("coexpression_type = 1: C1+C20\n");
         printf("coexpression_type = 2: C10+C2+\n\n");
@@ -395,13 +433,14 @@ int main(int argc, char* argv[]) {
         pos_cutoff_LD = atof(argv[5]);
         pos_cutoff_TD = atof(argv[6]);
         
-        strcpy(seed_TF_ID, argv[7]);
+        strcpy(input_file3, argv[7]);
         coex_type = atoi(argv[8]);
 
         FILE *fptr1 = fopen(input_file1, "r");
         FILE *fptr2 = fopen(input_file2, "r");
+        FILE *fptr3 = fopen(input_file3, "r");
         
-        if(fptr1 == NULL || fptr2 == NULL) {
+        if(fptr1 == NULL || fptr2 == NULL || fptr3 == NULL) {
             
             printf("\nCan't find the input file. Please check the inupt file again!\n\n");
             
@@ -409,9 +448,11 @@ int main(int argc, char* argv[]) {
             
             fclose (fptr1);
             fclose (fptr2);
+            fclose (fptr3);
         
             Read_Time_Course_Data_TFs(input_file1);
             Read_Time_Course_Data_genes(input_file2);
+            Read_seed_genes(input_file3);
 
             printf("NO. of TFs: %d\n", num_of_TFs);
             printf("NO. of Genes: %d\n", num_of_genes);
