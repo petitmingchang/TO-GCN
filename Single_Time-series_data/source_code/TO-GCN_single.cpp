@@ -322,7 +322,11 @@ void function_three () {
     fprintf(fout3, "TF gene ID,level in GCN\n");
     for(int i=0; i<num_of_TFs; i++) {
         if(TF_exp_table[i].level >= 0) {
-            fprintf(fout3, "%s,%d\n", TF_exp_table[i].gene_ID, TF_exp_table[i].level);
+		if(TF_exp_table[i].level == 1) {
+            		fprintf(fout3, "%s,%d\n", TF_exp_table[i].gene_ID, TF_exp_table[i].level);
+		} else {
+			fprintf(fout3, "%s,%d\n", TF_exp_table[i].gene_ID, TF_exp_table[i].level - 1);
+		}
         }
     }
     
